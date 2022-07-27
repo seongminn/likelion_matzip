@@ -32,15 +32,15 @@ const FoodName = styled.p``;
 const Board = ({ category }) => {
   const [favs, setFavs] = useRecoilState(heartState);
   const data = cate(category);
-  const onClickHeart = (id) => {
+  const onClickHeart = (id, name) => {
     setFavs((fav) => {
       const prevFavs = [...fav];
 
-      const favIdx = prevFavs.findIndex((fav) => fav === id);
-
+      const favIdx = prevFavs.findIndex((fav) => fav.id === id);
+      console.log(favIdx);
       let result;
       if (favIdx === -1) {
-        result = [...prevFavs, id];
+        result = [...prevFavs, { id, name }];
 
         localStorage.setItem("foods", JSON.stringify(result));
       } else {
@@ -52,7 +52,6 @@ const Board = ({ category }) => {
       return result;
     });
   };
-
   useEffect(() => {
     const storage = localStorage.getItem("foods");
 
@@ -62,22 +61,31 @@ const Board = ({ category }) => {
     } else {
       setFavs([]);
     }
-  }, []);
+  }, [setFavs]);
 
   return (
     <Box>
-      {data.map((d) => (
-        <FoodList key={d.id}>
-          <FoodName>{d.name}</FoodName>
-          <Icon onClick={() => onClickHeart(d.id)}>
-            {favs.includes(d.id) ? (
-              <HeartFilled style={{ color: "#ff6b81" }} />
-            ) : (
-              <HeartOutlined />
-            )}
-          </Icon>
-        </FoodList>
-      ))}
+      {category !== "my"
+        ? data.map((d) => (
+            <FoodList key={d.id + d.name}>
+              <FoodName>{d.name}</FoodName>
+              <Icon onClick={() => onClickHeart(d.id, d.name)}>
+                {favs.find((fav) => fav.id === d.id) ? (
+                  <HeartFilled style={{ color: "#ff6b81" }} />
+                ) : (
+                  <HeartOutlined />
+                )}
+              </Icon>
+            </FoodList>
+          ))
+        : favs.map((d) => (
+            <FoodList key={d.id + "favs"}>
+              <FoodName>{d.name}</FoodName>
+              <Icon onClick={() => onClickHeart(d.id)}>
+                <HeartFilled style={{ color: "#ff6b81" }} />
+              </Icon>
+            </FoodList>
+          ))}
     </Box>
   );
 };

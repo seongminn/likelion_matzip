@@ -11,8 +11,6 @@ const Wrapper = styled.div`
 const Home = () => {
   const { category } = useParams();
 
-  console.log(category);
-
   return (
     <Wrapper>
       <Header />
