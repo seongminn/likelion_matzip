@@ -4,6 +4,7 @@ import { cate } from "../api";
 import { useRecoilState } from "recoil";
 import { heartState } from "./../atom";
 import { useEffect } from "react";
+import CheckBox from "./CheckBox";
 
 const Box = styled.div`
   display: flex;
@@ -13,6 +14,7 @@ const Box = styled.div`
 
 const FoodList = styled.div`
   padding: 20px 10px;
+  padding-left: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -22,12 +24,17 @@ const FoodList = styled.div`
   }
 `;
 
-const Icon = styled.div`
+const FoodName = styled.div`
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Heart = styled.div`
   font-size: 14px;
   cursor: pointer;
 `;
-
-const FoodName = styled.p``;
 
 const Board = ({ category }) => {
   const [favs, setFavs] = useRecoilState(heartState);
@@ -40,6 +47,7 @@ const Board = ({ category }) => {
       console.log(favIdx);
       let result;
       if (favIdx === -1) {
+        alert(`${name}이(가) 찜 목록에 추가되었습니다😉`);
         result = [...prevFavs, { id, name }];
 
         localStorage.setItem("foods", JSON.stringify(result));
@@ -69,21 +77,24 @@ const Board = ({ category }) => {
         ? data.map((d) => (
             <FoodList key={d.id + d.name}>
               <FoodName>{d.name}</FoodName>
-              <Icon onClick={() => onClickHeart(d.id, d.name)}>
+              <Heart onClick={() => onClickHeart(d.id, d.name)}>
                 {favs.find((fav) => fav.id === d.id) ? (
                   <HeartFilled style={{ color: "#ff6b81" }} />
                 ) : (
                   <HeartOutlined />
                 )}
-              </Icon>
+              </Heart>
             </FoodList>
           ))
         : favs.map((d) => (
             <FoodList key={d.id + "favs"}>
-              <FoodName>{d.name}</FoodName>
-              <Icon onClick={() => onClickHeart(d.id)}>
+              <FoodName>
+                <CheckBox />
+                {d.name}
+              </FoodName>
+              <Heart onClick={() => onClickHeart(d.id)}>
                 <HeartFilled style={{ color: "#ff6b81" }} />
-              </Icon>
+              </Heart>
             </FoodList>
           ))}
     </Box>
