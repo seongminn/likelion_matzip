@@ -1,10 +1,14 @@
-import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import { cate } from "../api";
 import { useRecoilState } from "recoil";
 import { heartState } from "./../atom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CheckBox from "./CheckBox";
+import Pagination from "./Pagination";
+import Heart from "./Heart";
+
+const Wrapper = styled.div`
+  height: 100%;
+`;
 
 const Box = styled.div`
   display: flex;
@@ -31,35 +35,17 @@ const FoodName = styled.div`
   align-items: center;
 `;
 
-const Heart = styled.div`
-  font-size: 14px;
-  cursor: pointer;
-`;
+const Board = ({ data, category }) => {
+  const [page, setPage] = useState(1);
+  const limit = 6;
+  const offset = (page - 1) * limit;
 
-const Board = ({ category }) => {
   const [favs, setFavs] = useRecoilState(heartState);
-  const data = cate(category);
-  const onClickHeart = (id, name) => {
-    setFavs((fav) => {
-      const prevFavs = [...fav];
 
-      const favIdx = prevFavs.findIndex((fav) => fav.id === id);
-      console.log(favIdx);
-      let result;
-      if (favIdx === -1) {
-        alert(`${name}이(가) 찜 목록에 추가되었습니다😉`);
-        result = [...prevFavs, { id, name }];
+  useEffect(() => {
+    setPage(1);
+  }, [category]);
 
-        localStorage.setItem("foods", JSON.stringify(result));
-      } else {
-        prevFavs.splice(favIdx, 1);
-
-        result = prevFavs;
-        localStorage.setItem("foods", JSON.stringify(result));
-      }
-      return result;
-    });
-  };
   useEffect(() => {
     const storage = localStorage.getItem("foods");
 
@@ -72,32 +58,50 @@ const Board = ({ category }) => {
   }, [setFavs]);
 
   return (
-    <Box>
-      {category !== "my"
-        ? data.map((d) => (
-            <FoodList key={d.id + d.name}>
-              <FoodName>{d.name}</FoodName>
-              <Heart onClick={() => onClickHeart(d.id, d.name)}>
-                {favs.find((fav) => fav.id === d.id) ? (
-                  <HeartFilled style={{ color: "#ff6b81" }} />
-                ) : (
-                  <HeartOutlined />
-                )}
-              </Heart>
-            </FoodList>
-          ))
-        : favs.map((d) => (
-            <FoodList key={d.id + "favs"}>
-              <FoodName>
-                <CheckBox />
-                {d.name}
-              </FoodName>
-              <Heart onClick={() => onClickHeart(d.id)}>
-                <HeartFilled style={{ color: "#ff6b81" }} />
-              </Heart>
-            </FoodList>
-          ))}
-    </Box>
+    <Wrapper>
+      {category !== "my" ? (
+        <>
+          <Box>
+            {data.slice(offset, offset + limit).map(({ id, name }) => (
+              <FoodList key={id + name}>
+                <FoodName>{name}</FoodName>
+                <Heart
+                  id={id}
+                  name={name}
+                  filled={favs.find((fav) => fav.id === id)}
+                />
+              </FoodList>
+            ))}
+          </Box>
+          <Pagination
+            total={data.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+        </>
+      ) : (
+        <>
+          <Box>
+            {favs.slice(offset, offset + limit).map(({ id, name }) => (
+              <FoodList key={id + "favs"}>
+                <FoodName>
+                  <CheckBox />
+                  {name}
+                </FoodName>
+                <Heart id={id} name={name} filled={true} />
+              </FoodList>
+            ))}
+          </Box>
+          <Pagination
+            total={favs.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+        </>
+      )}
+    </Wrapper>
   );
 };
 

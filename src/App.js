@@ -1,6 +1,4 @@
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import Header from "./components/Header";
-import Board from "./components/Board";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./routes/Home";
 
 function App() {
