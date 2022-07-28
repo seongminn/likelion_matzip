@@ -6,7 +6,8 @@ import { cate } from "../api";
 
 const Wrapper = styled.div`
   width: 480px;
-  height: 100vh;
+  height: 100%;
+  margin: 0 auto;
 `;
 
 const Home = () => {

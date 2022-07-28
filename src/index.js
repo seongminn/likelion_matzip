@@ -64,6 +64,7 @@ body {
   line-height: 1.2;
 	overflow-x: hidden;
 	width: 640px;
+	height: 100%;
 	margin: 100px auto;
 	background-color: #ced6e0;
 	

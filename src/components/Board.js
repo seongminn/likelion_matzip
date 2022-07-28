@@ -7,7 +7,10 @@ import Pagination from "./Pagination";
 import Heart from "./Heart";
 
 const Wrapper = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 70vh;
 `;
 
 const Box = styled.div`
@@ -37,7 +40,7 @@ const FoodName = styled.div`
 
 const Board = ({ data, category }) => {
   const [page, setPage] = useState(1);
-  const limit = 6;
+  const limit = 8;
   const offset = (page - 1) * limit;
 
   const [favs, setFavs] = useRecoilState(heartState);
