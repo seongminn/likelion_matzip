@@ -31,11 +31,11 @@ const PositionBar = styled(motion.div)`
 
 const Header = () => {
   const allMatch = useMatch("/");
-  const koMatch = useMatch("/ko");
+  const krMatch = useMatch("/kr");
   const cnMatch = useMatch("/cn");
   const jpMatch = useMatch("/jp");
   const westMatch = useMatch("/west");
-  const cafeMatch = useMatch("/cafe");
+  const coffeeMatch = useMatch("/coffee");
   const myMatch = useMatch("/my");
 
   return (
@@ -48,7 +48,7 @@ const Header = () => {
           </Link>
         </Item>
         <Item>
-          <Link to="ko">한식 {koMatch && <PositionBar layoutId="bar" />}</Link>
+          <Link to="kr">한식 {krMatch && <PositionBar layoutId="bar" />}</Link>
         </Item>
         <Item>
           <Link to="cn">중식 {cnMatch && <PositionBar layoutId="bar" />}</Link>
@@ -62,8 +62,8 @@ const Header = () => {
           </Link>
         </Item>
         <Item>
-          <Link to="cafe">
-            카페 {cafeMatch && <PositionBar layoutId="bar" />}
+          <Link to="coffee">
+            카페 {coffeeMatch && <PositionBar layoutId="bar" />}
           </Link>
         </Item>
         <Item>

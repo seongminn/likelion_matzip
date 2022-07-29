@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import Board from "./../components/Board";
 import Header from "../components/Header";
-import { cate, getApi } from "../api";
+import { getApi } from "../api";
 import { useQuery } from "react-query";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -24,11 +24,12 @@ const Loading = styled.p`
 const Home = () => {
   const { category } = useParams();
 
-  const { data, isLoading } = useQuery([`${category}`], () =>
-    category ? getApi(category) : getApi("all")
+  const { data, isLoading } = useQuery(
+    [`${category}`],
+    () => category === "my" || getApi(`${category ? category : "all"}`)
   );
 
-  const data2 = category ? cate(category) : cate("all");
+  // const data2 = category ? cate(category) : cate("all");
 
   return (
     <Wrapper>
@@ -38,11 +39,7 @@ const Home = () => {
           <LoadingOutlined />
         </Loading>
       ) : (
-        <Board
-          data={data2}
-          category={category || "all"}
-          length={data2.length}
-        />
+        <Board data={data} category={category || "all"} length={data.length} />
       )}
     </Wrapper>
   );
