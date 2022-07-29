@@ -1,6 +1,6 @@
 export async function getApi(category) {
   const res = await fetch(
-    `https://74868553-c1e0-4dd0-b231-b83833ce6744.mock.pstmn.io/${category}`
+    `https://afd8cb3b-0077-4554-a7be-4ce86d83222c.mock.pstmn.io/${category}`
   );
 
   return await res.json();
